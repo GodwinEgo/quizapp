@@ -12,6 +12,9 @@ const Question = ({ question, options, selectedOption, onSelectedOption }) => {
             name="options"
             value={option}
             checked={selectedOption === option}
+            onChange={() => {
+              onSelectedOption(option);
+            }}
           />
         </div>;
       })}
