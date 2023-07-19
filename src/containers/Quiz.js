@@ -1,5 +1,5 @@
 // src/containers/Quiz.js
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOption, nextQuestion, resetQuiz } from "../redux/quizSlice";
 import Question from "../components/Question";
@@ -9,14 +9,6 @@ const Quiz = () => {
   const { quizzes, currentQuestion, selectedOption, score } = useSelector(
     (state) => state.quiz
   );
-
-  console.log(quizzes); // Check if quizzes data is available
-  console.log(currentQuestion); // Check the value of currentQuestion
-  console.log(quizzes[currentQuestion]); // Check if currentQuiz data is available
-
-  useEffect(() => {
-    dispatch(resetQuiz());
-  }, [dispatch]);
 
   const handleSelectOption = (option) => {
     dispatch(selectOption(option));
