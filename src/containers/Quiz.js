@@ -32,8 +32,15 @@ const Quiz = () => {
     dispatch(startQuiz());
   };
 
+  const handleFinishQuiz = () => {
+    // You can dispatch any action or show a different view here after the quiz is completed
+    // For now, we are just resetting the quiz
+    dispatch(resetQuiz());
+    dispatch(startQuiz());
+  };
+
   if (currentQuestion >= 20) {
-    // Check if 20 questions have been answered
+    // Quiz completed, show the result
     return (
       <div>
         <h2>Quiz Completed!</h2>
@@ -44,8 +51,12 @@ const Quiz = () => {
   }
 
   const currentQuiz = quizzes[currentQuestion];
-  if (!currentQuiz || !currentQuiz.questions || !currentQuiz.questions.length) {
-    // Handle the case when currentQuiz or questions are missing
+  if (
+    !currentQuiz ||
+    !currentQuiz.questions ||
+    currentQuiz.questions.length === 0
+  ) {
+    // Invalid or missing data, show an error message
     return <div>Error: No questions found for the current quiz.</div>;
   }
 
@@ -60,9 +71,17 @@ const Quiz = () => {
         selectedOption={selectedOption}
         onSelectOption={handleSelectOption}
       />
-      <button onClick={handleNextQuestion} disabled={!selectedOption}>
-        {currentQuestion === 19 ? "Finish Quiz" : "Next Question"}
-      </button>
+      {currentQuestion < 19 ? (
+        // Show the Next button for questions 1 to 19
+        <button onClick={handleNextQuestion} disabled={!selectedOption}>
+          Next Question
+        </button>
+      ) : (
+        // Show the Finish button for the last question (question 20)
+        <button onClick={handleFinishQuiz} disabled={!selectedOption}>
+          Finish Quiz
+        </button>
+      )}
     </div>
   );
 };
