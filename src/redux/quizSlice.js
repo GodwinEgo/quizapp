@@ -11,23 +11,14 @@ const shuffleArray = (array) => {
   return array;
 };
 
-// Make sure each quiz object has a questions property (empty array if no questions)
+// Filter out quizzes with no questions and ensure each quiz has at least one question
 const quizzesWithQuestions = quizzes.map((quiz) => ({
   ...quiz,
-  questions: quiz.questions || [],
-}));
-
-// Ensure each quiz has at least one question
-const quizzesWithAtLeastOneQuestion = quizzesWithQuestions.map((quiz) => ({
-  ...quiz,
-  questions: quiz.questions.length ? quiz.questions : [{}], // Insert an empty question if no questions are available
+  questions: quiz.questions && quiz.questions.length ? quiz.questions : [{}], // Insert an empty question if no questions are available
 }));
 
 const initialState = {
-  quizzes: quizzesWithAtLeastOneQuestion.map((quiz) => ({
-    ...quiz,
-    questions: shuffleArray([...quiz.questions]).slice(0, 20), // Shuffle and select the first 20 questions
-  })),
+  quizzes: shuffleArray(quizzesWithQuestions).slice(0, 20), // Shuffle and select the first 20 quizzes
   currentQuestion: 0,
   selectedOption: "",
   score: 0,
@@ -42,9 +33,10 @@ const quizSlice = createSlice({
     },
     nextQuestion(state) {
       const currentQuiz = state.quizzes[state.currentQuestion];
+      const currentQuestionData = currentQuiz.questions[state.currentQuestion];
       if (
-        currentQuiz.questions[state.currentQuestion].answer ===
-        state.selectedOption
+        currentQuestionData &&
+        currentQuestionData.answer === state.selectedOption
       ) {
         state.score += 1;
       }
@@ -55,10 +47,7 @@ const quizSlice = createSlice({
       state.currentQuestion = 0;
       state.selectedOption = "";
       state.score = 0;
-      state.quizzes = quizzesWithAtLeastOneQuestion.map((quiz) => ({
-        ...quiz,
-        questions: shuffleArray([...quiz.questions]).slice(0, 20),
-      }));
+      state.quizzes = shuffleArray(quizzesWithQuestions).slice(0, 20);
     },
   },
 });
