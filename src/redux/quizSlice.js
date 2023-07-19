@@ -11,6 +11,12 @@ const shuffleArray = (array) => {
   return array;
 };
 
+// Make sure each quiz object has a questions property (empty array if no questions)
+const quizzesWithQuestions = quizzes.map((quiz) => ({
+  ...quiz,
+  questions: quiz.questions || [],
+}));
+
 const initialState = {
   quizzes: [],
   currentQuestion: 0,
@@ -23,23 +29,35 @@ const quizSlice = createSlice({
   initialState,
   reducers: {
     startQuiz(state) {
-      state.quizzes = shuffleArray(quizzes).slice(0, 20); // Shuffle and select the first 20 quizzes
+      state.quizzes = shuffleArray(quizzesWithQuestions).slice(0, 20); // Shuffle and select the first 20 quizzes
+      state.currentQuestion = 0;
+      state.selectedOption = "";
+      state.score = 0;
     },
     selectOption(state, action) {
       state.selectedOption = action.payload;
     },
     nextQuestion(state) {
       const currentQuiz = state.quizzes[state.currentQuestion];
+
       if (
-        currentQuiz.questions[state.currentQuestion].answer ===
-        state.selectedOption
+        currentQuiz &&
+        currentQuiz.questions &&
+        currentQuiz.questions.length > 0 &&
+        currentQuiz.questions[0].answer === state.selectedOption
       ) {
+        // Increase score if the selected option is correct
         state.score += 1;
       }
-      state.currentQuestion += 1;
-      state.selectedOption = "";
+
+      // Move to the next question
+      if (state.currentQuestion < 19) {
+        state.currentQuestion += 1;
+        state.selectedOption = "";
+      }
     },
     resetQuiz(state) {
+      state.quizzes = shuffleArray(quizzesWithQuestions).slice(0, 20); // Shuffle and select 20 random quizzes
       state.currentQuestion = 0;
       state.selectedOption = "";
       state.score = 0;

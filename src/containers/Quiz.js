@@ -8,10 +8,11 @@ import {
   resetQuiz,
 } from "../redux/quizSlice";
 import Question from "../components/Question";
+import QuizResults from "../components/QuizResults";
 
 const Quiz = () => {
   const dispatch = useDispatch();
-  const { quizzes, currentQuestion, selectedOption, score } = useSelector(
+  const { quizzes, currentQuestion, selectedOption } = useSelector(
     (state) => state.quiz
   );
 
@@ -24,33 +25,30 @@ const Quiz = () => {
   };
 
   const handleNextQuestion = () => {
-    dispatch(nextQuestion());
+    const currentQuiz = quizzes[currentQuestion];
+
+    if (
+      currentQuiz &&
+      currentQuiz.questions &&
+      currentQuiz.questions.length > 0 &&
+      currentQuiz.questions[0].answer === selectedOption
+    ) {
+      // Increase score if the selected option is correct
+      dispatch(nextQuestion());
+    }
   };
 
   const handleResetQuiz = () => {
     dispatch(resetQuiz());
-    dispatch(startQuiz());
   };
 
-  const handleFinishQuiz = () => {
-    // You can dispatch any action or show a different view here after the quiz is completed
-    // For now, we are just resetting the quiz
-    dispatch(resetQuiz());
-    dispatch(startQuiz());
-  };
+  const isQuizCompleted = currentQuestion >= 20;
+  const currentQuiz = quizzes[currentQuestion];
 
-  if (currentQuestion >= 20) {
-    // Quiz completed, show the result
-    return (
-      <div>
-        <h2>Quiz Completed!</h2>
-        <p>Your Score: {score}</p>
-        <button onClick={handleResetQuiz}>Restart Quiz</button>
-      </div>
-    );
+  if (isQuizCompleted) {
+    return <QuizResults />;
   }
 
-  const currentQuiz = quizzes[currentQuestion];
   if (
     !currentQuiz ||
     !currentQuiz.questions ||
@@ -71,17 +69,10 @@ const Quiz = () => {
         selectedOption={selectedOption}
         onSelectOption={handleSelectOption}
       />
-      {currentQuestion < 19 ? (
-        // Show the Next button for questions 1 to 19
-        <button onClick={handleNextQuestion} disabled={!selectedOption}>
-          Next Question
-        </button>
-      ) : (
-        // Show the Finish button for the last question (question 20)
-        <button onClick={handleFinishQuiz} disabled={!selectedOption}>
-          Finish Quiz
-        </button>
-      )}
+      <button onClick={handleNextQuestion} disabled={!selectedOption}>
+        Next Question
+      </button>
+      <button onClick={handleResetQuiz}>Reset Quiz</button>
     </div>
   );
 };
