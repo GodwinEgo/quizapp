@@ -1,31 +1,57 @@
-import React, { useState } from "react";
+// src/containers/Quiz.js
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectOption, nextQuestion, resetQuiz } from "../redux/quizSlice";
 import Question from "../components/Question";
-import { useSelector } from "react-redux";
 
 const Quiz = () => {
-  const [currenQuestion, setCurrentQuestion] = useState(0);
-  const [selectedOption, setSelectedOption] = useState("");
-  const quizzes = useSelector((state) => state.quiz.quizzes);
+  const dispatch = useDispatch();
+  const { quizzes, currentQuestion, selectedOption, score } = useSelector(
+    (state) => state.quiz
+  );
+
+  console.log(quizzes); // Check if quizzes data is available
+  console.log(currentQuestion); // Check the value of currentQuestion
+  console.log(quizzes[currentQuestion]); // Check if currentQuiz data is available
+
+  useEffect(() => {
+    dispatch(resetQuiz());
+  }, [dispatch]);
+
+  const handleSelectOption = (option) => {
+    dispatch(selectOption(option));
+  };
 
   const handleNextQuestion = () => {
-    //logic for next question
+    dispatch(nextQuestion());
   };
 
-  const handleSelectedOption = (option) => {
-    setSelectedOption(option);
-  };
+  if (currentQuestion >= 20) {
+    // Check if 20 questions have been answered
+    return (
+      <div>
+        <h2>Quiz Completed!</h2>
+        <p>Your Score: {score}</p>
+        <button onClick={() => dispatch(resetQuiz())}>Restart Quiz</button>
+      </div>
+    );
+  }
+
+  const currentQuiz = quizzes[currentQuestion];
+  const currentQuestionData = currentQuiz.questions[currentQuestion];
 
   return (
     <div>
-      {quizzes.length > 0 && currenQuestion < quizzes.length && (
-        <Question
-          question={quizzes[currenQuestion].questions[currenQuestion].question}
-          options={quizzes[currentQuestion].questions[currentQuestion].options}
-          selectedOption={selectedOption}
-          onSelectOption={handleSelectOption}
-        />
-      )}
-      {/* BUTTON FOR HANDLING NEXT QUESTION */}
+      <h2>{currentQuiz.title}</h2>
+      <Question
+        question={currentQuestionData.question}
+        options={currentQuestionData.options}
+        selectedOption={selectedOption}
+        onSelectOption={handleSelectOption}
+      />
+      <button onClick={handleNextQuestion} disabled={!selectedOption}>
+        {currentQuestion === 19 ? "Finish Quiz" : "Next Question"}
+      </button>
     </div>
   );
 };

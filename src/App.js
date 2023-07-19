@@ -1,12 +1,14 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Quiz from "./containers/Quiz";
 
 const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <Route path="/" element={<Quiz />} />
+        <Routes>
+          <Route path="/" element={<Quiz />} />
+        </Routes>
       </BrowserRouter>
     </div>
   );
