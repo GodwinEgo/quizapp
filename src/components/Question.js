@@ -16,6 +16,7 @@ const Question = ({ question, options, selectedOption, onSelectedOption }) => {
               onSelectedOption(option);
             }}
           />
+          <label htmlFor={`option${index}`}>{option}</label>
         </div>;
       })}
     </div>
