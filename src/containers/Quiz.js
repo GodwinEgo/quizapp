@@ -1,15 +1,23 @@
 // src/containers/Quiz.js
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectOption, nextQuestion, resetQuiz } from "../redux/quizSlice";
+import {
+  startQuiz,
+  selectOption,
+  nextQuestion,
+  resetQuiz,
+} from "../redux/quizSlice";
 import Question from "../components/Question";
-import "../styles/quiz.scss";
 
 const Quiz = () => {
   const dispatch = useDispatch();
   const { quizzes, currentQuestion, selectedOption, score } = useSelector(
     (state) => state.quiz
   );
+
+  useEffect(() => {
+    dispatch(startQuiz());
+  }, [dispatch]);
 
   const handleSelectOption = (option) => {
     dispatch(selectOption(option));
@@ -19,13 +27,18 @@ const Quiz = () => {
     dispatch(nextQuestion());
   };
 
+  const handleResetQuiz = () => {
+    dispatch(resetQuiz());
+    dispatch(startQuiz());
+  };
+
   if (currentQuestion >= 20) {
     // Check if 20 questions have been answered
     return (
       <div>
         <h2>Quiz Completed!</h2>
         <p>Your Score: {score}</p>
-        <button onClick={() => dispatch(resetQuiz())}>Restart Quiz</button>
+        <button onClick={handleResetQuiz}>Restart Quiz</button>
       </div>
     );
   }
