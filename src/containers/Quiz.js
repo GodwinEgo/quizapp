@@ -3,6 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOption, nextQuestion, resetQuiz } from "../redux/quizSlice";
 import Question from "../components/Question";
+import "../styles/quiz.scss";
 
 const Quiz = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,12 @@ const Quiz = () => {
     );
   }
 
+  // Make sure currentQuiz is defined and contains questions
   const currentQuiz = quizzes[currentQuestion];
+  if (!currentQuiz || !currentQuiz.questions || !currentQuiz.questions.length) {
+    return <div>Error: No questions found for the current quiz.</div>;
+  }
+
   const currentQuestionData = currentQuiz.questions[currentQuestion];
 
   return (

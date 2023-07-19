@@ -31,7 +31,29 @@ const quizSlice = createSlice({
   name: "quiz",
   initialState,
   reducers: {
-    // Rest of the code remains the same
+    selectOption(state, action) {
+      state.selectedOption = action.payload;
+    },
+    nextQuestion(state) {
+      const currentQuiz = state.quizzes[state.currentQuestion];
+      if (
+        currentQuiz.questions[state.currentQuestion].answer ===
+        state.selectedOption
+      ) {
+        state.score += 1;
+      }
+      state.currentQuestion += 1;
+      state.selectedOption = "";
+    },
+    resetQuiz(state) {
+      state.currentQuestion = 0;
+      state.selectedOption = "";
+      state.score = 0;
+      state.quizzes = quizzesWithQuestions.map((quiz) => ({
+        ...quiz,
+        questions: shuffleArray([...quiz.questions]).slice(0, 20),
+      }));
+    },
   },
 });
 
