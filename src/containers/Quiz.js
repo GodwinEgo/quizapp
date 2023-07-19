@@ -3,7 +3,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOption, nextQuestion, resetQuiz } from "../redux/quizSlice";
 import Question from "../components/Question";
-import "../styles/quiz.scss";
 
 const Quiz = () => {
   const dispatch = useDispatch();
