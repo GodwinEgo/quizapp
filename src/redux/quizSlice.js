@@ -20,6 +20,7 @@ const initialState = {
   currentQuestion: 0,
   score: 0,
   isQuizCompleted: false,
+  showAnswers: false,
 };
 
 const quizSlice = createSlice({
@@ -85,6 +86,10 @@ const quizSlice = createSlice({
       state.currentQuestion = 0;
       state.score = 0;
       state.isQuizCompleted = false;
+      state.showAnswers = false;
+    },
+    toggleShowAnswers(state) {
+      state.showAnswers = !state.showAnswers;
     },
   },
 });
@@ -96,5 +101,6 @@ export const {
   prevQuestion,
   submitQuiz,
   resetQuiz,
+  toggleShowAnswers,
 } = quizSlice.actions;
 export default quizSlice.reducer;
