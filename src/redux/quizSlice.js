@@ -31,7 +31,7 @@ const quizSlice = createSlice({
     startQuiz(state) {
       state.quizzes = shuffleArray(
         quizzesWithQuestions.flatMap((quiz) => quiz.questions)
-      ); // Shuffle all questions
+      ).slice(0, 20); // Shuffle and select the first 20 questions
       state.currentQuestion = 0;
       state.selectedOption = "";
       state.score = 0;
@@ -59,7 +59,7 @@ const quizSlice = createSlice({
     resetQuiz(state) {
       state.quizzes = shuffleArray(
         quizzesWithQuestions.flatMap((quiz) => quiz.questions)
-      ); // Shuffle all questions
+      ).slice(0, 20); // Shuffle and select the first 20 questions
       state.currentQuestion = 0;
       state.selectedOption = "";
       state.score = 0;

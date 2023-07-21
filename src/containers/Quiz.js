@@ -9,7 +9,6 @@ import {
 } from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
-import "../styles/quiz.scss";
 
 const Quiz = () => {
   const dispatch = useDispatch();
@@ -26,12 +25,7 @@ const Quiz = () => {
   };
 
   const handleNextQuestion = () => {
-    const currentQuestionData = quizzes[currentQuestion];
-
-    if (currentQuestionData && currentQuestionData.answer === selectedOption) {
-      // Increase score if the selected option is correct
-      dispatch(nextQuestion());
-    }
+    dispatch(nextQuestion());
   };
 
   const handleResetQuiz = () => {
@@ -59,9 +53,7 @@ const Quiz = () => {
         selectedOption={selectedOption}
         onSelectOption={handleSelectOption}
       />
-      <button onClick={handleNextQuestion} disabled={!selectedOption}>
-        Next Question
-      </button>
+      <button onClick={handleNextQuestion}>Next Question</button>
       <button onClick={handleResetQuiz}>Reset Quiz</button>
     </div>
   );
