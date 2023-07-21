@@ -9,6 +9,7 @@ import {
 } from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
+import "../styles/quiz.scss";
 
 const Quiz = () => {
   const dispatch = useDispatch();
@@ -25,14 +26,9 @@ const Quiz = () => {
   };
 
   const handleNextQuestion = () => {
-    const currentQuiz = quizzes[currentQuestion];
+    const currentQuestionData = quizzes[currentQuestion];
 
-    if (
-      currentQuiz &&
-      currentQuiz.questions &&
-      currentQuiz.questions.length > 0 &&
-      currentQuiz.questions[0].answer === selectedOption
-    ) {
+    if (currentQuestionData && currentQuestionData.answer === selectedOption) {
       // Increase score if the selected option is correct
       dispatch(nextQuestion());
     }
@@ -42,27 +38,21 @@ const Quiz = () => {
     dispatch(resetQuiz());
   };
 
-  const isQuizCompleted = currentQuestion >= 20;
-  const currentQuiz = quizzes[currentQuestion];
+  const isQuizCompleted = currentQuestion >= quizzes.length;
+  const currentQuestionData = quizzes[currentQuestion];
 
   if (isQuizCompleted) {
     return <QuizResults />;
   }
 
-  if (
-    !currentQuiz ||
-    !currentQuiz.questions ||
-    currentQuiz.questions.length === 0
-  ) {
+  if (!currentQuestionData) {
     // Invalid or missing data, show an error message
     return <div>Error: No questions found for the current quiz.</div>;
   }
 
-  const currentQuestionData = currentQuiz.questions[0];
-
   return (
     <div>
-      <h2>{currentQuiz.title}</h2>
+      <h2>{currentQuestionData.question}</h2>
       <Question
         question={currentQuestionData.question}
         options={currentQuestionData.options}
