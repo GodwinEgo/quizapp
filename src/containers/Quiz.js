@@ -9,6 +9,7 @@ import {
 } from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
+import "../styles/quiz.scss";
 
 const Quiz = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,9 @@ const Quiz = () => {
 
   return (
     <div>
-      <h2>{currentQuestionData.question}</h2>
+      <h2>
+        Question {currentQuestion + 1}: {currentQuestionData.question}
+      </h2>
       <Question
         question={currentQuestionData.question}
         options={currentQuestionData.options}
