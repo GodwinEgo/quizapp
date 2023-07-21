@@ -1,7 +1,13 @@
 // src/containers/Quiz.js
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { startQuiz, selectOption, nextQuestion } from "../redux/quizSlice";
+import {
+  startQuiz,
+  selectOption,
+  nextQuestion,
+  prevQuestion,
+  submitQuiz,
+} from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
 
@@ -23,6 +29,14 @@ const Quiz = () => {
     dispatch(nextQuestion());
   };
 
+  const handlePrevQuestion = () => {
+    dispatch(prevQuestion());
+  };
+
+  const handleSubmitQuiz = () => {
+    dispatch(submitQuiz());
+  };
+
   const isQuizCompleted = currentQuestion >= quizzes.length;
   const currentQuestionData = quizzes[currentQuestion];
 
@@ -35,6 +49,9 @@ const Quiz = () => {
     return <div>Error: No questions found for the current quiz.</div>;
   }
 
+  const isFirstQuestion = currentQuestion === 0;
+  const isLastQuestion = currentQuestion === quizzes.length - 1;
+
   return (
     <div>
       <h2>
@@ -46,7 +63,16 @@ const Quiz = () => {
         selectedOption={selectedOption}
         onSelectOption={handleSelectOption}
       />
-      <button onClick={handleNextQuestion}>Next Question</button>
+      <div className="button-container">
+        {!isFirstQuestion && (
+          <button onClick={handlePrevQuestion}>Prev Question</button>
+        )}
+        {isLastQuestion ? (
+          <button onClick={handleSubmitQuiz}>Submit</button>
+        ) : (
+          <button onClick={handleNextQuestion}>Next Question</button>
+        )}
+      </div>
     </div>
   );
 };
