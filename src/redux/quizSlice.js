@@ -47,6 +47,9 @@ const quizSlice = createSlice({
     nextQuestion(state) {
       const currentQuestionData = state.quizzes[state.currentQuestion];
 
+      // Mark the question as answered
+      currentQuestionData.isAnswered = true;
+
       if (currentQuestionData.answer === currentQuestionData.selectedOption) {
         // Increase score if the selected option is correct
         state.score += 1;
@@ -64,14 +67,21 @@ const quizSlice = createSlice({
       }
     },
     submitQuiz(state) {
-      // You can perform any actions or logic here when the quiz is submitted.
-      // For this example, we can simply reset the quiz state.
+      // Calculate the score based on the selected options
+      state.score = state.quizzes.reduce((acc, question) => {
+        if (question.answer === question.selectedOption) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
+
+      // Mark all questions as answered
       state.quizzes.forEach((question) => {
-        question.selectedOption = "";
-        question.isAnswered = false;
+        question.isAnswered = true;
       });
+
+      // Reset the current question index
       state.currentQuestion = 0;
-      state.score = 0;
     },
   },
 });
