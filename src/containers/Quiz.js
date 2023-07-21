@@ -20,6 +20,8 @@ const Quiz = () => {
 
   const [isQuizCompleted, setIsQuizCompleted] = useState(false);
 
+  const totalQuestions = quizzes.length; // Total number of questions in the quiz
+
   useEffect(() => {
     dispatch(startQuiz());
   }, [dispatch]);
@@ -42,7 +44,7 @@ const Quiz = () => {
   };
 
   if (isQuizCompleted) {
-    return <QuizResults score={score} />;
+    return <QuizResults score={score} totalQuestions={totalQuestions} />;
   }
 
   if (!currentQuestionData) {
