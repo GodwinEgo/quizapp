@@ -1,12 +1,7 @@
 // src/containers/Quiz.js
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  startQuiz,
-  selectOption,
-  nextQuestion,
-  resetQuiz,
-} from "../redux/quizSlice";
+import { startQuiz, selectOption, nextQuestion } from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
 
@@ -26,10 +21,6 @@ const Quiz = () => {
 
   const handleNextQuestion = () => {
     dispatch(nextQuestion());
-  };
-
-  const handleResetQuiz = () => {
-    dispatch(resetQuiz());
   };
 
   const isQuizCompleted = currentQuestion >= quizzes.length;
@@ -56,7 +47,6 @@ const Quiz = () => {
         onSelectOption={handleSelectOption}
       />
       <button onClick={handleNextQuestion}>Next Question</button>
-      <button onClick={handleResetQuiz}>Reset Quiz</button>
     </div>
   );
 };
