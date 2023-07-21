@@ -20,7 +20,6 @@ const quizzesWithQuestions = quizzes.map((quiz) => ({
 const initialState = {
   quizzes: [],
   currentQuestion: 0,
-  selectedOption: "",
   score: 0,
 };
 
@@ -31,21 +30,24 @@ const quizSlice = createSlice({
     startQuiz(state) {
       state.quizzes = shuffleArray(
         quizzesWithQuestions.flatMap((quiz) => quiz.questions)
-      ).slice(0, 20); // Shuffle and select the first 20 questions
+      )
+        .slice(0, 20)
+        .map((question) => ({
+          ...question,
+          selectedOption: "",
+          isAnswered: false,
+        })); // Shuffle and select the first 20 questions with initial state
       state.currentQuestion = 0;
-      state.selectedOption = "";
       state.score = 0;
     },
     selectOption(state, action) {
-      state.selectedOption = action.payload;
+      const { questionIndex, option } = action.payload;
+      state.quizzes[questionIndex].selectedOption = option;
     },
     nextQuestion(state) {
       const currentQuestionData = state.quizzes[state.currentQuestion];
 
-      if (
-        currentQuestionData &&
-        currentQuestionData.answer === state.selectedOption
-      ) {
+      if (currentQuestionData.answer === currentQuestionData.selectedOption) {
         // Increase score if the selected option is correct
         state.score += 1;
       }
@@ -53,21 +55,22 @@ const quizSlice = createSlice({
       // Move to the next question
       if (state.currentQuestion < state.quizzes.length - 1) {
         state.currentQuestion += 1;
-        state.selectedOption = "";
       }
     },
     prevQuestion(state) {
       // Move to the previous question
       if (state.currentQuestion > 0) {
         state.currentQuestion -= 1;
-        state.selectedOption = "";
       }
     },
     submitQuiz(state) {
       // You can perform any actions or logic here when the quiz is submitted.
       // For this example, we can simply reset the quiz state.
+      state.quizzes.forEach((question) => {
+        question.selectedOption = "";
+        question.isAnswered = false;
+      });
       state.currentQuestion = 0;
-      state.selectedOption = "";
       state.score = 0;
     },
   },
