@@ -7,13 +7,14 @@ import {
   nextQuestion,
   prevQuestion,
   submitQuiz,
-  resetQuiz,
 } from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
+import { useNavigate } from "react-router-dom";
 
 const Quiz = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { quizzes, currentQuestion, score, isQuizCompleted } = useSelector(
     (state) => state.quiz
   );
@@ -39,15 +40,15 @@ const Quiz = () => {
     dispatch(submitQuiz());
   };
 
-  const handleRestartQuiz = () => {
-    dispatch(resetQuiz());
+  const handleEndQuiz = () => {
+    navigate("/");
   };
 
   if (isQuizCompleted) {
     return (
       <div>
         <QuizResults score={score} totalQuestions={quizzes.length} />
-        <button onClick={handleRestartQuiz}>Restart Quiz</button>
+        <button onClick={handleEndQuiz}>End Quiz</button>
       </div>
     );
   }

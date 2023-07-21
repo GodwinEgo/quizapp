@@ -73,16 +73,8 @@ const quizSlice = createSlice({
       state.currentQuestion = 0;
       state.isQuizCompleted = true;
     },
-    resetQuiz(state) {
-      state.quizzes = shuffleArray(
-        quizzesWithQuestions.flatMap((quiz) => quiz.questions)
-      )
-        .slice(0, 20)
-        .map((question) => ({
-          ...question,
-          selectedOption: "",
-          isAnswered: false,
-        }));
+    endQuiz(state) {
+      state.quizzes = [];
       state.currentQuestion = 0;
       state.score = 0;
       state.isQuizCompleted = false;
@@ -100,7 +92,7 @@ export const {
   nextQuestion,
   prevQuestion,
   submitQuiz,
-  resetQuiz,
+  endQuiz,
   toggleShowAnswers,
 } = quizSlice.actions;
 export default quizSlice.reducer;
