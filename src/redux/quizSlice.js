@@ -21,6 +21,7 @@ const initialState = {
   quizzes: [],
   currentQuestion: 0,
   score: 0,
+  isQuizCompleted: false,
 };
 
 const quizSlice = createSlice({
@@ -39,6 +40,7 @@ const quizSlice = createSlice({
         })); // Shuffle and select the first 20 questions with initial state
       state.currentQuestion = 0;
       state.score = 0;
+      state.isQuizCompleted = false;
     },
     selectOption(state, action) {
       const { questionIndex, option } = action.payload;
@@ -82,6 +84,17 @@ const quizSlice = createSlice({
 
       // Reset the current question index
       state.currentQuestion = 0;
+      state.isQuizCompleted = true;
+    },
+    resetQuiz(state) {
+      // Reset the quiz state
+      state.quizzes.forEach((question) => {
+        question.selectedOption = "";
+        question.isAnswered = false;
+      });
+      state.currentQuestion = 0;
+      state.score = 0;
+      state.isQuizCompleted = false;
     },
   },
 });
@@ -92,5 +105,6 @@ export const {
   nextQuestion,
   prevQuestion,
   submitQuiz,
+  resetQuiz,
 } = quizSlice.actions;
 export default quizSlice.reducer;

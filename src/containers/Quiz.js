@@ -1,5 +1,5 @@
 // src/containers/Quiz.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   startQuiz,
@@ -7,20 +7,17 @@ import {
   nextQuestion,
   prevQuestion,
   submitQuiz,
+  resetQuiz,
 } from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
 
 const Quiz = () => {
   const dispatch = useDispatch();
-  const { quizzes, currentQuestion, score } = useSelector(
+  const { quizzes, currentQuestion, score, isQuizCompleted } = useSelector(
     (state) => state.quiz
   );
   const currentQuestionData = quizzes[currentQuestion];
-
-  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
-
-  const totalQuestions = quizzes.length; // Total number of questions in the quiz
 
   useEffect(() => {
     dispatch(startQuiz());
@@ -39,12 +36,20 @@ const Quiz = () => {
   };
 
   const handleSubmitQuiz = () => {
-    setIsQuizCompleted(true);
     dispatch(submitQuiz());
   };
 
+  const handleRestartQuiz = () => {
+    dispatch(resetQuiz());
+  };
+
   if (isQuizCompleted) {
-    return <QuizResults score={score} totalQuestions={totalQuestions} />;
+    return (
+      <div>
+        <QuizResults score={score} totalQuestions={quizzes.length} />
+        <button onClick={handleRestartQuiz}>Restart Quiz</button>
+      </div>
+    );
   }
 
   if (!currentQuestionData) {
