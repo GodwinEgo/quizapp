@@ -9,7 +9,6 @@ import {
 } from "../redux/quizSlice";
 import Question from "../components/Question";
 import QuizResults from "../components/QuizResults";
-import "../styles/quiz.scss";
 
 const Quiz = () => {
   const dispatch = useDispatch();
