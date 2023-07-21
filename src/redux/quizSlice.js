@@ -56,10 +56,16 @@ const quizSlice = createSlice({
         state.selectedOption = "";
       }
     },
-    resetQuiz(state) {
-      state.quizzes = shuffleArray(
-        quizzesWithQuestions.flatMap((quiz) => quiz.questions)
-      ).slice(0, 20); // Shuffle and select the first 20 questions
+    prevQuestion(state) {
+      // Move to the previous question
+      if (state.currentQuestion > 0) {
+        state.currentQuestion -= 1;
+        state.selectedOption = "";
+      }
+    },
+    submitQuiz(state) {
+      // You can perform any actions or logic here when the quiz is submitted.
+      // For this example, we can simply reset the quiz state.
       state.currentQuestion = 0;
       state.selectedOption = "";
       state.score = 0;
@@ -67,6 +73,11 @@ const quizSlice = createSlice({
   },
 });
 
-export const { startQuiz, selectOption, nextQuestion, resetQuiz } =
-  quizSlice.actions;
+export const {
+  startQuiz,
+  selectOption,
+  nextQuestion,
+  prevQuestion,
+  submitQuiz,
+} = quizSlice.actions;
 export default quizSlice.reducer;
