@@ -1,5 +1,5 @@
 // src/containers/Quiz.js
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   startQuiz,
@@ -18,6 +18,8 @@ const Quiz = () => {
   );
   const currentQuestionData = quizzes[currentQuestion];
 
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+
   useEffect(() => {
     dispatch(startQuiz());
   }, [dispatch]);
@@ -35,10 +37,9 @@ const Quiz = () => {
   };
 
   const handleSubmitQuiz = () => {
+    setIsQuizCompleted(true);
     dispatch(submitQuiz());
   };
-
-  const isQuizCompleted = currentQuestion >= quizzes.length;
 
   if (isQuizCompleted) {
     return <QuizResults score={score} />;
