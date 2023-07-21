@@ -13,16 +13,17 @@ import QuizResults from "../components/QuizResults";
 
 const Quiz = () => {
   const dispatch = useDispatch();
-  const { quizzes, currentQuestion, selectedOption } = useSelector(
+  const { quizzes, currentQuestion, score } = useSelector(
     (state) => state.quiz
   );
+  const currentQuestionData = quizzes[currentQuestion];
 
   useEffect(() => {
     dispatch(startQuiz());
   }, [dispatch]);
 
   const handleSelectOption = (option) => {
-    dispatch(selectOption(option));
+    dispatch(selectOption({ questionIndex: currentQuestion, option }));
   };
 
   const handleNextQuestion = () => {
@@ -38,10 +39,9 @@ const Quiz = () => {
   };
 
   const isQuizCompleted = currentQuestion >= quizzes.length;
-  const currentQuestionData = quizzes[currentQuestion];
 
   if (isQuizCompleted) {
-    return <QuizResults />;
+    return <QuizResults score={score} />;
   }
 
   if (!currentQuestionData) {
@@ -60,7 +60,7 @@ const Quiz = () => {
       <Question
         question={currentQuestionData.question}
         options={currentQuestionData.options}
-        selectedOption={selectedOption}
+        selectedOption={currentQuestionData.selectedOption}
         onSelectOption={handleSelectOption}
       />
       <div className="button-container">
