@@ -27,11 +27,7 @@ const quizzes = [
         ],
         answer: "William Shakespeare",
       },
-      {
-        question: "What is the largest mammal in the world?",
-        options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
-        answer: "Blue Whale",
-      },
+
       {
         question: "Which famous scientist developed the theory of relativity?",
         options: [
